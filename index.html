@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>翰墨碑林 | 书法碑刻鉴赏与研学</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Serif SC', 'Times New Roman', serif;
+            background: #fef7e8;
+            background-image: radial-gradient(circle at 10% 20%, rgba(210, 180, 140, 0.05) 2%, transparent 2.5%),
+                              radial-gradient(circle at 80% 70%, rgba(160, 120, 80, 0.03) 1.5%, transparent 1.8%);
+            background-size: 40px 40px, 35px 35px;
+            color: #2c2418;
+            scroll-behavior: smooth;
+        }
+
+        /* 宣纸纹理点缀 */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* 标题装饰 */
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            border-left: 6px solid #b87c4f;
+            padding-left: 20px;
+            margin: 48px 0 32px 0;
+            position: relative;
+            color: #3e2a1f;
+        }
+        .section-title i {
+            color: #b87c4f;
+            margin-right: 12px;
+        }
+
+        /* 头部导航区 */
+        .header {
+            background: #fff9ef;
+            border-bottom: 1px solid #e9dbc9;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(2px);
+        }
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            padding: 18px 0;
+        }
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #6b3e1c;
+            letter-spacing: 4px;
+        }
+        .logo p {
+            font-size: 0.75rem;
+            color: #8b694a;
+            letter-spacing: 1px;
+        }
+        .nav-links a {
+            margin-left: 28px;
+            text-decoration: none;
+            color: #4f3a28;
+            font-weight: 500;
+            transition: 0.2s;
+            border-bottom: 1px solid transparent;
+        }
+        .nav-links a:hover {
+            color: #b4582c;
+            border-bottom-color: #b87c4f;
+        }
+        @media (max-width: 680px) {
+            .nav-bar { flex-direction: column; gap: 12px; align-items: center; }
+            .nav-links a { margin: 0 12px; }
+        }
+
+        /* 碑刻画廊 Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 32px 24px;
+            margin-top: 16px;
+        }
+        .card {
+            background: #ffffffdb;
+            backdrop-filter: blur(2px);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 12px 28px -8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid #f0e2d0;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -12px rgba(70, 40, 20, 0.2);
+            border-color: #dbbd98;
+        }
+        .card-img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            background: linear-gradient(145deg, #f8f0e3 0%, #e8dcc8 40%, #d4c4a8 100%);
+            transition: 0.2s;
+        }
+        /* 碑刻占位图样式 */
+        .card-img-placeholder {
+            width: 100%;
+            height: 260px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #f8f0e3 0%, #e8dcc8 40%, #d4c4a8 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .card-img-placeholder::before {
+            content: '';
+            position: absolute;
+            inset: 15px;
+            border: 2px solid #c4a882;
+            border-radius: 4px;
+            opacity: 0.6;
+        }
+        .card-img-placeholder::after {
+            content: '';
+            position: absolute;
+            inset: 25px;
+            border: 1px dashed #b89b6a;
+            opacity: 0.4;
+        }
+        .placeholder-title {
+            font-size: 1.6rem;
+            color: #8b694a;
+            letter-spacing: 12px;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+            z-index: 1;
+        }
+        .placeholder-subtitle {
+            font-size: 0.85rem;
+            color: #a08060;
+            margin-top: 8px;
+            letter-spacing: 4px;
+            z-index: 1;
+        }
+        .card-info {
+            padding: 16px 18px 20px;
+        }
+        .card-info h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #4a2c1a;
+        }
+        .card-info p {
+            font-size: 0.85rem;
+            color: #7f6242;
+            letter-spacing: 0.5px;
+        }
+        .card-info .small-note {
+            font-size: 0.7rem;
+            margin-top: 8px;
+            color: #ab8b64;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* 技巧专栏 */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 20px 0 30px;
+        }
+        .tip-item {
+            background: #fff6ed;
+            padding: 28px 20px;
+            border-radius: 36px 20px 36px 20px;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid #f2e2d0;
+        }
+        .tip-item i {
+            font-size: 2.2rem;
+            color: #b87c4f;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+        .tip-item h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .tip-item p {
+            line-height: 1.65;
+            color: #4c3826;
+        }
+
+        /* 趣闻与评论双栏布局 */
+        .story-comment {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+        .story-box, .comment-box {
+            background: #fffef7;
+            border-radius: 28px;
+            padding: 28px 26px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border: 1px solid #eadbcb;
+            transition: 0.2s;
+        }
+        .story-box h3, .comment-box h3 {
+            font-size: 1.7rem;
+            font-weight: 600;
+            border-left: 4px solid #bb7a48;
+            padding-left: 16px;
+            margin-bottom: 24px;
+        }
+        .story-list {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+        .story-item {
+            border-bottom: 1px dashed #eedbcb;
+            padding-bottom: 16px;
+        }
+        .story-item h4 {
+            font-size: 1.2rem;
+            color: #a56134;
+            margin-bottom: 8px;
+        }
+        .story-item p {
+            line-height: 1.6;
+            color: #4f3a2a;
+        }
+        .quote-card {
+            background: #faf3e8;
+            padding: 20px 24px;
+            border-radius: 40px 16px 40px 16px;
+            margin-bottom: 24px;
+            transition: 0.1s;
+        }
+        .quote-card i {
+            color: #d8a46b;
+            font-size: 1.4rem;
+            margin-right: 10px;
+        }
+        .quote-text {
+            font-style: normal;
+            font-size: 0.98rem;
+            line-height: 1.65;
+            color: #3e2c1d;
+        }
+        .quote-author {
+            margin-top: 12px;
+            text-align: right;
+            font-weight: 500;
+            color: #936e48;
+        }
+
+        /* 模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(30, 20, 12, 0.92);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            max-width: 85vw;
+            max-height: 85vh;
+            margin: auto;
+            display: block;
+            border-radius: 28px;
+            box-shadow: 0 30px 40px rgba(0,0,0,0.4);
+            border: 4px solid #f3e5d4;
+        }
+        .modal-caption {
+            text-align: center;
+            color: #f0e0ca;
+            padding: 18px 0;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+        .close-modal {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            color: #f1e2cf;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.2s;
+            cursor: pointer;
+            background: rgba(0,0,0,0.4);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .close-modal:hover {
+            color: #e0b281;
+            background: #2c1a0e;
+        }
+        footer {
+            text-align: center;
+            padding: 40px 20px 28px;
+            border-top: 1px solid #e3cfbb;
+            margin-top: 40px;
+            color: #7c6242;
+            font-size: 0.8rem;
+        }
+        @media (max-width: 800px) {
+            .story-comment { grid-template-columns: 1fr; gap: 28px; }
+            .section-title { font-size: 1.7rem; margin: 32px 0 24px; }
+        }
+        button, .card, .tip-item, .story-box, .comment-box { user-select: none; }
+        a { text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="container nav-bar">
+        <div class="logo">
+            <h1>翰墨碑林</h1>
+            <p>· 观碑摹帖 · 心摹手追 ·</p>
+        </div>
+        <div class="nav-links">
+            <a href="#gallery">碑刻鉴赏</a>
+            <a href="#techniques">笔法精要</a>
+            <a href="#stories">逸闻·品评</a>
+        </div>
+    </div>
+</div>
+
+<main class="container">
+    <!-- 碑刻画廊鉴赏区 -->
+    <section id="gallery">
+        <div class="section-title">
+            <i class="fas fa-monument"></i> 名碑法帖 · 临池宝鉴
+        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
+        <p style="text-align: right; font-size: 0.75rem; margin-top: 16px; color: #ad8b68;"><i class="fas fa-hand-pointer"></i> 点击任一碑帖图片，放大细观墨韵笔意</p>
+    </section>
+
+    <!-- 书法技巧专栏 -->
+    <section id="techniques">
+        <div class="section-title">
+            <i class="fas fa-pen-fancy"></i> 挥毫入妙 · 技法心传
+        </div>
+        <div class="tips-grid">
+            <div class="tip-item">
+                <i class="fas fa-hand-peace"></i>
+                <h3>执笔之法</h3>
+                <p>五指执笔法：“擫、押、钩、格、抵”，指实掌虚，腕肘悬起，气沉自然。临习乙瑛碑时尤重腕力沉稳，方得隶书蚕头雁尾之韵。</p>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-drafting-compass"></i>
+                <h3>中锋用笔</h3>
+                <p>令笔锋常在点画中央运行，如锥画沙。王羲之《兰亭序》精细遒媚，正源自中锋多变，侧锋取妍，初学者当从篆隶筑基，中锋圆劲。</p>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-feather-alt"></i>
+                <h3>临摹要诀</h3>
+                <p>先读帖，审其笔意结构；再摹其形，后追其神。赵孟頫言“临书在玩味古人法帖”，日课不辍，对比修正，方可入帖出帖。</p>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-tint"></i>
+                <h3>墨法润燥</h3>
+                <p>墨分五色，润含春雨，干裂秋风。写乙瑛碑墨宜饱满；写行草则枯润相生。研墨需浓淡得宜，纸墨相发乃得神采。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 趣闻故事 + 古今评论 双栏 -->
+    <section id="stories">
+        <div class="section-title">
+            <i class="fas fa-scroll"></i> 翰墨遗珍 · 轶事品藻
+        </div>
+        <div class="story-comment">
+            <!-- 左侧趣闻故事栏 -->
+            <div class="story-box">
+                <h3><i class="fas fa-book-open"></i> 书坛趣闻·碑林往事</h3>
+                <div class="story-list">
+                    <div class="story-item">
+                        <h4>🦢 王羲之“写经换鹅”</h4>
+                        <p>山阴道士养一群好鹅，羲之爱鹅，道士求写《黄庭经》，曰“写毕群鹅相赠”。羲之欣然书之，笼鹅而归，其潇洒天性传为千古佳话。今观《兰亭》，犹见文人风骨。</p>
+                    </div>
+                    <div class="story-item">
+                        <h4>📜 乙瑛碑 · 汉隶极则</h4>
+                        <p>东汉桓帝永兴元年立，记载鲁相乙瑛奏请置孔庙百石卒史之事。清人方朔评：“字字方正沉厚，亦足以称宗庙之美。” 临此碑如对庙堂，肃穆雄浑。</p>
+                    </div>
+                    <div class="story-item">
+                        <h4>🎋 赵孟頫日书万字</h4>
+                        <p>赵孟頫一日能写万字，精劲从容。相传他作小楷《洛神赋》时，年近六十而笔力不减，曾自谓“结字因时相传，用笔千古不易”，为后世楷法圭臬。</p>
+                    </div>
+                    <div class="story-item">
+                        <h4>🏮 祭侄文稿 · 血泪至情</h4>
+                        <p>颜真卿悼念从侄颜季明，悲愤交加，挥笔而成天下第二行书。涂改处愈见真情，墨气苍然。元鲜于枢评：“唐太师鲁公颜真卿书《祭侄季明文稿》，天下行书第二。”</p>
+                    </div>
+                </div>
+            </div>
+            <!-- 右侧古今名人评论栏 -->
+            <div class="comment-box">
+                <h3><i class="fas fa-comment-dots"></i> 名贤品评·藻鉴精粹</h3>
+                <div class="quote-card">
+                    <i class="fas fa-quote-left"></i>
+                    <div class="quote-text">“《乙瑛碑》骨肉匀适，情文流畅，汉隶之最可师法者。” — 清·何绍基</div>
+                    <div class="quote-author">—— 东洲居士跋</div>
+                </div>
+                <div class="quote-card">
+                    <i class="fas fa-quote-left"></i>
+                    <div class="quote-text">“右军如龙，北海如象。兰亭之妙，在笔画之外，神气生动，顾盼有姿。” — 宋·黄庭坚 评王羲之</div>
+                    <div class="quote-author">——《山谷题跋》</div>
+                </div>
+                <div class="quote-card">
+                    <i class="fas fa-quote-left"></i>
+                    <div class="quote-text">“赵子昂书法，结体妍丽，用笔遒劲，冠绝古今。洛神赋玉骨冰肌，晋人风度犹存。”</div>
+                    <div class="quote-author">—— 明·董其昌 评赵孟頫</div>
+                </div>
+                <div class="quote-card">
+                    <i class="fas fa-quote-left"></i>
+                    <div class="quote-text">“曹全碑秀美飞动，不束缚，不驰骤，为汉石中第一神品。”</div>
+                    <div class="quote-author">—— 近代·康有为 《广艺舟双楫》</div>
+                </div>
+                <div class="quote-card">
+                    <i class="fas fa-quote-left"></i>
+                    <div class="quote-text">“张旭肚痛帖，如神虬腾霄，骤雨旋风，意不在字而奇变百出，乃颠逸极致。”</div>
+                    <div class="quote-author">—— 明·王世贞</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <i class="fas fa-feather-alt"></i> 心摹手追，神交古贤 · 所有碑刻影像仅供研学鉴赏 · 沉浸墨海，传承文心
+</footer>
+
+<!-- 模态框 图片鉴赏放大 -->
+<div id="imageModal" class="modal">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" id="modalImg" alt="碑帖大图鉴赏">
+    <div id="modalCaption" class="modal-caption"></div>
+</div>
+
+<script>
+    // 碑刻数据列表（包含名称、年代/作者、简介、缩略图及高清大图）
+    const steleData = [
+        {
+            name: "王羲之《兰亭序》",
+            desc: "东晋·永和九年 天下第一行书",
+            brief: "冯承素摹神龙本，妍美流便，潇洒绝尘",
+            thumb: "images/lantingxu.jpg",
+            large: "images/lantingxu.jpg",
+            placeholderTitle: "兰亭序"
+        },
+        {
+            name: "汉《乙瑛碑》",
+            desc: "东汉·永兴元年 汉隶典范",
+            brief: "方整沉厚，骨肉匀适，孔庙三碑之首",
+            thumb: "images/yiying_bei.jpg",
+            large: "images/yiying_bei.jpg",
+            placeholderTitle: "乙瑛碑"
+        },
+        {
+            name: "赵孟頫《洛神赋》",
+            desc: "元·大德年间 行楷典范",
+            brief: "姿韵雅逸，结构精严，二王嫡脉",
+            thumb: "images/洛神赋/20260607-071812.png",
+            large: "images/洛神赋/20260607-071812.png",
+            placeholderTitle: "洛神赋"
+        },
+        {
+            name: "汉《曹全碑》",
+            desc: "东汉·中平二年 秀润流美",
+            brief: "飘逸秀丽，字法遒丽，汉隶之婉约派",
+            thumb: "images/caoquanbei.jpg",
+            large: "images/caoquanbei.jpg",
+            placeholderTitle: "曹全碑"
+        },
+        {
+            name: "颜真卿《祭侄文稿》",
+            desc: "唐·乾元元年 天下第二行书",
+            brief: "悲愤交激，渴笔苍茫，至情至性",
+            thumb: "images/祭侄文稿/20260607-072621.png",
+            large: "images/祭侄文稿/20260607-072621.png",
+            placeholderTitle: "祭侄文稿"
+        },
+        {
+            name: "张旭《肚痛帖》",
+            desc: "唐·狂草颠逸之作",
+            brief: "惊涛骇浪，狂放不羁，意态超然",
+            thumb: "images/dutongtie.jpg",
+            large: "images/dutongtie.jpg",
+            placeholderTitle: "肚痛帖"
+        },
+        {
+            name: "王羲之《快雪时晴帖》",
+            desc: "东晋·行书墨迹",
+            brief: "圆劲古雅，优游逸豫，乾隆三希之首",
+            thumb: "images/快雪时晴帖/20260607-072413.png",
+            large: "images/快雪时晴帖/20260607-072413.png",
+            placeholderTitle: "快雪时晴帖"
+        }
+    ];
+
+    const galleryGrid = document.getElementById('galleryGrid');
+
+    // 渲染碑刻画廊
+    function renderGallery() {
+        if (!galleryGrid) return;
+        galleryGrid.innerHTML = '';
+        steleData.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.setAttribute('data-large', item.large);
+            card.setAttribute('data-name', item.name);
+            
+            // 创建占位图容器
+            const placeholder = document.createElement('div');
+            placeholder.className = 'card-img-placeholder';
+            placeholder.innerHTML = `
+                <span class="placeholder-title">${item.placeholderTitle || '碑刻'}</span>
+                <span class="placeholder-subtitle">碑刻拓本</span>
+            `;
+            
+            // 创建图片元素
+            const img = document.createElement('img');
+            img.src = item.thumb;
+            img.alt = item.name;
+            img.className = 'card-img';
+            img.loading = 'lazy';
+            img.style.display = 'none';
+            
+            // 图片加载成功时显示图片，隐藏占位图
+            img.onload = function() {
+                placeholder.style.display = 'none';
+                img.style.display = 'block';
+            };
+            
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'card-info';
+            infoDiv.innerHTML = `
+                <h3>${item.name}</h3>
+                <p>${item.desc}</p>
+                <div class="small-note"><i class="fas fa-brush"></i> ${item.brief}</div>
+            `;
+            
+            card.appendChild(placeholder);
+            card.appendChild(img);
+            card.appendChild(infoDiv);
+            
+            // 点击卡片打开大图模态框
+            card.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const largeUrl = card.getAttribute('data-large');
+                const title = card.getAttribute('data-name') || item.name;
+                openModal(largeUrl, title);
+            });
+            
+            galleryGrid.appendChild(card);
+        });
+    }
+
+    // 模态框逻辑
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImg');
+    const modalCaption = document.getElementById('modalCaption');
+    const closeModalBtn = document.querySelector('.close-modal');
+    
+    function openModal(imgSrc, title) {
+        if (!modal || !modalImg) return;
+        modal.style.display = 'flex';
+        modalImg.src = imgSrc;
+        modalImg.alt = title;
+        modalCaption.innerText = title + '  ·  点击任意处关闭赏析';
+        // 防止body滚动
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+    }
+    
+    // 事件绑定
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
+    }
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+    // esc键关闭
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && modal.style.display === 'flex') {
+            closeModal();
+        }
+    });
+    
+    // 页面初始化渲染
+    renderGallery();
+
+    // 添加平滑锚点及附加优雅提示
+    document.querySelectorAll('.nav-links a').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                e.preventDefault();
+                const targetId = href.substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        });
+    });
+    
+    // 为技巧栏增加一点笔墨氛围 (纯装饰)
+    console.log("翰墨碑林已备 — 临摹鉴赏，妙悟书道");
+</script>
+</body>
+</html>
